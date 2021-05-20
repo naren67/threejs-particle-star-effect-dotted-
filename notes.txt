@@ -1,0 +1,8 @@
+starter pack three js
+https://github.com/designcourse/threejs-webpack-starter - clone it by a custom name
+
+2 - npm i
+
+3 - npm run dev
+
+-----------------------------------------------------------------

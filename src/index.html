@@ -7,5 +7,34 @@
 </head>
 <body>
     <canvas class="webgl"></canvas>
+    <div class="container">
+        <div class="content">
+            <h1>The next <br> Dimension</h1>
+            <p>Black holes extremely dense, with such strong gravitational attraction that even light cannot escape their grasp if it comes near enough</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js" integrity="sha512-cdV6j5t5o24hkSciVrb8Ki6FveC2SgwGfLE31+ZQRHAeSRxYhAQskLkq3dLm8ZcWe1N3vBOEYmmbhzf7NTtFFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/CSSRulePlugin.min.js" integrity="sha512-0bzaetZStCnsUgbCtGVxftzF/L32PNOnrMlYLXwBOKl8cUjTSSDfJVyyJsNwGoI0iE0WUqni2eEfO35kJjFj5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- gsap animation -->
+    <script>
+
+
+        const content = CSSRulePlugin.getRule('.content::before')
+        const h1 = document.querySelector('h1')
+        const p = document.querySelector('p')
+
+        //call gsap timepline plugin
+        const t1 = gsap.timeline()
+
+        t1.from(content, {cssRule: {scale: 0}, delay: 1, duration: 2})
+        t1.to(h1, {clipPath : 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)', duration: 2, y:15}, '-=1')
+        t1.to(p, {clipPath : 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)', duration: 2, y: 38}, '-=0.5')
+
+
+    </script>
+
+
 </body>
 </html>

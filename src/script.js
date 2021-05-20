@@ -3,6 +3,16 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 
+
+
+//texture loader - (plus png)
+const loader = new THREE.TextureLoader()
+const cross = loader.load('./plus.png')
+
+
+
+
+
 // Debug
 const gui = new dat.GUI()
 
@@ -15,14 +25,67 @@ const scene = new THREE.Scene()
 // Objects
 const geometry = new THREE.TorusGeometry( .7, .2, 16, 100 );
 
+
+
+
+
+
+
+
+//add custom particles - (stars)
+const particlesGeometry = new THREE.BufferGeometry;
+const particlesCount = 5000;
+
+const postArray = new Float32Array(particlesCount * 3)
+// xyz, xyz, xyz, xyz
+
+//looping
+for(let i=0;i<particlesCount * 3; i++){
+    // postArray[i] = Math.random()
+
+    //to mke it center
+    // postArray[i] = Math.random() - 0.5
+
+    //to spead it with a widt 0f 100%
+    postArray[i] = (Math.random() - 0.5) * 5
+
+    //for creativity
+    // postArray[i] = (Math.random() - 0.5) * (Math.random() * 5)
+}
+
+//positioning
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(postArray, 3))
+
+
+
+
+
+
+
 // Materials
 
-const material = new THREE.MeshBasicMaterial()
-material.color = new THREE.Color(0xff0000)
+//defaultly presented material storage
+const material = new THREE.PointsMaterial({
+    size:0.005,
+    color: 'black'
+})
+
+//storage for the particles material
+const particlesMaterial = new THREE.PointsMaterial({
+    size:0.003,
+    // map:cross,
+    // transparent:true,
+     color:'black',
+    //blending:THREE.AdditiveBlending,
+})
+
 
 // Mesh
-const sphere = new THREE.Mesh(geometry,material)
-scene.add(sphere)
+const sphere = new THREE.Points(geometry,material)
+//floating particles code
+const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial)
+//add the newly created materials and geometry
+scene.add(sphere, particlesMesh)
 
 // Lights
 
@@ -78,6 +141,28 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+
+
+//add background color
+renderer.setClearColor(new THREE.Color('#ffffff'), 0.9)
+
+
+
+//mouse movement events for star particles
+
+document.addEventListener('mousemove', animateParticles)
+
+let mouseX = 0
+let mouseY = 0
+
+function animateParticles(event){
+    mouseX =event.clientX
+    mouseY = event.clientY
+}
+
+
+
+
 /**
  * Animate
  */
@@ -89,8 +174,27 @@ const tick = () =>
 
     const elapsedTime = clock.getElapsedTime()
 
-    // Update objects
+    // Update objects - donut
     sphere.rotation.y = .5 * elapsedTime
+
+
+    window.addEventListener('load',()=>{
+        runSlow()
+})
+
+
+    //to get a initial star movement
+    particlesMesh.rotation.y = .1 * elapsedTime
+    
+
+
+    // Update objects - stars rotation        // ***** notes - play with the 0.00008 to 1 to make the star move speeder and also play with minus plus and x and y value
+   if(mouseX >0){
+    particlesMesh.rotation.x = -mouseY * (elapsedTime * 0.00008)
+    particlesMesh.rotation.y = -mouseX * (elapsedTime * 0.00008)
+   }
+
+
 
     // Update Orbital Controls
     // controls.update()
